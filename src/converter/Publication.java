@@ -1,45 +1,46 @@
 package converter;
 
+import java.util.Vector;
+
 /**
  * Created by teodor on 18.02.2016.
  */
 public class Publication {
-    private String author, email, name, topic;
+    private Vector<String> authors;
+    private String email, name, topic;
     private int startPage, finishPage;
     //String content; (maybe)
 
     public Publication() {
         name = "";
-        author = "";
+        authors = new Vector<String>();
         email = "";
         startPage = 0;
         finishPage = 0;
     }
 
-    public Publication( String name, String author, String topic, int startPage, int finishPage ) {
-        this();
+    public Publication( String name ) {
         this.name = name;
-        this.author = author;
-        this.topic = topic;
-        this.startPage = startPage;
-        this.finishPage = finishPage;
+    }
+
+    public Publication( String name, Vector<String> authors ) {
+        this(name);
+        this.authors = authors;
     }
 
 
-    public Publication( String name, String author, String topic, String email, int startPage, int finishPage ) {
-        this(name, author, topic, startPage, finishPage);
-        this.email = email;
+
+    public Vector<String> getAuthor() {
+        return authors;
     }
 
-
-    public String getAuthor() {
-        return author;
+    public void setAuthor(Vector<String> authors) {
+        this.authors = authors;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void addAuthro(String newAuthor) {
+        this.authors.add( newAuthor );
     }
-
 
     public String getEmail() {
         return email;
@@ -57,13 +58,13 @@ public class Publication {
         this.name = name;
     }
 
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
+//    public String getTopic() {
+//        return topic;
+//    }
+//
+//    public void setTopic(String topic) {
+//        this.topic = topic;
+//    }
 
     public int getStartPage() {
         return startPage;
@@ -83,7 +84,7 @@ public class Publication {
 
     public String toString() {
         String output = "--- Name: " + name +
-                "\n--- Author: " + author +
+                "\n--- Author: " + authors +
                 "\n--- StarPage: " + startPage +
                 "\n--- FinishPage: " + finishPage ;
         return output;
