@@ -106,10 +106,8 @@ public class Main {
                 jumpIndex = parsedText.indexOf("TABLE OF CONTENTS");
                 jumpIndex += 18; // 17 lungimea + \n
                 parsedText = parsedText.substring(jumpIndex);
+
                 //start parsing
-                // i will exit when i will have the author index or smth
-
-
                 for( String chunk : parsedText.split("\\n\\s+\\n") ) {
                     /* sunt cazuri in care am mai multe ' ' si cazuri
                     cand am unul singur, asa ca am decis sa las doar
@@ -120,9 +118,10 @@ public class Main {
                     if( ( chunk.contains("..") || chunk.contains("…") ) && chunk.contains("\uF0B7 ") ) {
 
                         if( isLetterOrNumber(chunk.charAt(0)) ) {
-                            //it's catergory
+                            //it's catergory - voi sari pana la acel caracter. Trebuie sa vedem daca putem pastra acest
+                            // caracter ca punct de reper.
                             chunk = chunk.substring(
-                                    chunk.indexOf(" \uF0B7 "), // aici trebuie sa pun un regex. Inca ma gandesc cum sa fac
+                                    chunk.indexOf("\uF0B7 "), // aici trebuie sa pun un regex. Inca ma gandesc cum sa fac
                                     chunk.length()
                             );
                         }
