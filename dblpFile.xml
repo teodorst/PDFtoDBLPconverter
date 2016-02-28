@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<dblpsubmission>
+  <proceedings>
+    <key>Computer Science</key>
+    <editor>Marian Dârdală</editor>
+    <editor>Traian Eugen Rebedea</editor>
+    <title>ROMANIAN CONFERENCE ON HUMAN-COMPUTER INTERACTION</title>
+    <issn type="electronic">2344 – 1690</issn>
+    <conf>
+      <location>Bucharest, Romania</location>
+      <date>24-25 September</date>
+    </conf>
+    <toc>
+      <section>Invited Papers</section>
+      <publ>
+        <author>Panayiotis Zaphiris </author>
+        <title>Social Computing, HCI, Social Change and Peace</title>
+        <pages>5-10</pages>
+      </publ>
+      <section>Usability and evaluation</section>
+      <publ>
+        <author>Paul Doney, Marc Fabri </author>
+        <title>Seeking New Insights: A design thinking approach to the development of persuasive tech- nology aimed at supporting clients of a weight management program</title>
+        <pages>15-20</pages>
+      </publ>
+      <publ>
+        <author>Dragos Daniel Iordache, Alexandru Balog, Costin Pribeanu, Vincentas Lamanauskas </author>
+        <title>A motivational model for Facebook acceptance by university students</title>
+        <pages>21-24</pages>
+      </publ>
+      <publ>
+        <author>Costin Pribeanu, Maria Gheorghe-Moisii, Paul Fogarassy-Neszly </author>
+        <title>Accessibility of Romanian municipal websites – conformance with WCAG2</title>
+        <pages>25-28</pages>
+      </publ>
+      <section>Gaming and simulation</section>
+      <publ>
+        <author>Vlad Trifanica, Alexandru Butean, Alin Moldoveanu, Diana Butean </author>
+        <title>Gamepad vibration methods to help blind people perceive colors</title>
+        <pages>37-40</pages>
+      </publ>
+      <publ>
+        <author>Mircea Catalin Catana, Dorian Gorgan </author>
+        <title>Analyzing Computer Game Strategies through Visual Techniques</title>
+        <pages>41-48</pages>
+      </publ>
+      <publ>
+        <author>Oana Balan, Alin Moldoveanu, Florica Moldoveanu, Alexandru Butean </author>
+        <title>Developing a navigational 3D audio game with hierarchical levels of difficulty for the vis- ually impaired players</title>
+        <pages>49-54</pages>
+      </publ>
+      <section>Natural language interfaces</section>
+      <publ>
+        <author>Mihaela Colhon </author>
+        <title>A Design Framework for Foreign Language Learning Applications</title>
+        <pages>61-66</pages>
+      </publ>
+      <publ>
+        <author>Bogdan Marchis, Alexandru Tifrea, Mihai Volmer, Traian Rebedea </author>
+        <title>Opinion Summarization for Hotel Reviews</title>
+        <pages>67-74</pages>
+      </publ>
+      <publ>
+        <author>Ionut Cristian Paraschiv, Mihai Dascalu, Stefan Trausan-Matu, Philippe Dessus v ix </author>
+        <title>Automated Paper Annotation with ReaderBench</title>
+        <pages>75-80</pages>
+      </publ>
+      <publ>
+        <author>Dorin Rotarescu, Adrian Bogatu, Traian Rebedea, Stefan Ruseti </author>
+        <title>Conversational Agent that Models a Historical Personality</title>
+        <pages>81-86</pages>
+      </publ>
+      <section>Mobile human computer interfaces</section>
+      <publ>
+        <author>Bogdan Troanca, Alexandru Butean, Alin Moldoveanu, Oana Balan </author>
+        <title>Introducing basic geometric shapes to visually impaired people using a mobile app</title>
+        <pages>91-94</pages>
+      </publ>
+      <publ>
+        <author>Szabolcs Orban, Teodor Stefanut </author>
+        <title>Indoor Localization and Navigation Using Phone Sensors and a 3D Model of the Building</title>
+        <pages>95-100</pages>
+      </publ>
+      <publ>
+        <author>Paul Strimbeanu, Alexandru Butean, Florica Moldoveanu </author>
+        <title>An approach for detecting ID frauds in a traditional voting system using a smartphone stand</title>
+        <pages>101-104</pages>
+      </publ>
+      <section>Interaction in virtual spaces</section>
+      <publ>
+        <author>Saleh Salous, Julien Newton, Laure Leroy, Safwan Chendeb </author>
+        <title>Gestural Recognition by a Four-Kinect Module in a CAVE “Le SAS”</title>
+        <pages>111-114</pages>
+      </publ>
+      <publ>
+        <author>Mihai Chifor, Teodor Stefanut </author>
+        <title>Immersive Virtual Reality application using Google Cardboard and Leap Motion technolo- gies</title>
+        <pages>115-120</pages>
+      </publ>
+      <publ>
+        <author>Dan Razvan Ilies, Adrian Sabou and Dorian Gorgan </author>
+        <title>Real Time Visualization of Crowd Dynamics Scenarios</title>
+        <pages>121-128</pages>
+      </publ>
+      <section>Interactive web applications</section>
+      <publ>
+        <author>Cristian Neamtu, Adrian Iftene </author>
+        <title>Diversifying Search Results Using Semantic Resources</title>
+        <pages>133-136</pages>
+      </publ>
+      <publ>
+        <author>Alexandru Balog, Costin Pribeanu, Ion Ivan </author>
+        <title>Motives and characteristics of Facebook use by students from a Romanian university</title>
+        <pages>137-140</pages>
+      </publ>
+      <publ>
+        <author>Daniel Gavril, Adrian Iftene </author>
+        <title>Movies Classification</title>
+        <pages>141-144</pages>
+      </publ>
+      <publ>
+        <author>Paul Fogarassy-Neszly, Zlatomir Zinveliu, Costin Pribeanu </author>
+        <title>A software component for polyglot text-to-speech synthesis: beta testing results</title>
+        <pages>145-148</pages>
+      </publ>
+    </toc>
+  </proceedings>
+</dblpsubmission>

@@ -7,38 +7,37 @@ import java.util.Vector;
  */
 public class Publication {
     private Vector<String> authors;
-    private String email, name, topic;
+    private String email, name, section;
     private int startPage, finishPage;
-    //String content; (maybe)
 
     public Publication() {
         name = "";
         authors = new Vector<String>();
         email = "";
+        section = "";
         startPage = 0;
         finishPage = 0;
     }
 
-    public Publication( String name ) {
+    public Publication( String name, String section ) {
         this.name = name;
+        this.section = section;
     }
 
-    public Publication( String name, Vector<String> authors ) {
-        this(name);
+    public Publication( String name, String section, Vector<String> authors ) {
+        this(name, section);
         this.authors = authors;
     }
 
-
-
-    public Vector<String> getAuthor() {
+    public Vector<String> getAuthors() {
         return authors;
     }
 
-    public void setAuthor(Vector<String> authors) {
+    public void setAuthors(Vector<String> authors) {
         this.authors = authors;
     }
 
-    public void addAuthro(String newAuthor) {
+    public void addAuthor(String newAuthor) {
         this.authors.add( newAuthor );
     }
 
@@ -58,13 +57,13 @@ public class Publication {
         this.name = name;
     }
 
-//    public String getTopic() {
-//        return topic;
-//    }
-//
-//    public void setTopic(String topic) {
-//        this.topic = topic;
-//    }
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
 
     public int getStartPage() {
         return startPage;
@@ -84,6 +83,7 @@ public class Publication {
 
     public String toString() {
         String output = "--- Name: " + name +
+                "\n--- Section: " + section +
                 "\n--- Author: " + authors +
                 "\n--- StarPage: " + startPage +
                 "\n--- FinishPage: " + finishPage ;

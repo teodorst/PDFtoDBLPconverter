@@ -1,163 +1,165 @@
 package converter;
 
-import org.apache.pdfbox.cos.COSDocument;
-import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
-import org.apache.pdfbox.io.RandomAccessRead;
-import org.apache.pdfbox.pdfparser.PDFParser;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.text.PDFTextStripper;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.StringTokenizer;
-import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.print.Doc;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
-/**
- * Created by teodor on 18.02.2016.
- */
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
+///**
+// * Created by teodor on 18.02.2016.
+// */
 
 
 public class Main {
 
-    private static boolean isNumber ( char character ) {
-        return (
-                character >= 48 && character <= 67
-        );
-    }
-
-    private static boolean isLetterOrNumber( char character ) {
-        return (
-            isNumber(character) || // number
-            character >= 65 && character <= 90 || // big letter
-            character >= 97 && character <= 122   // small letter
-        );
-    }
-
-    private static int min( int a, int b ) {
-        if ( a == -1 && b == -1 )
-            return -1;
-        else
-            if( a == -1 )
-                return b;
-        else
-            if( b == -1 )
-                return a;
-        else
-            return a < b ? a : b;
-    }
 
 
-    private static int max( int a, int b ) {
-        if ( a == -1 && b == -1 )
-            return -1;
-        else
-        if( a == -1 )
-            return b;
-        else
-        if( b == -1 )
-            return a;
-        else
-            return a > b ? a : b;
+    public static void dbplXMLCreate(Publish publish) throws ParserConfigurationException, TransformerException {
+
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+        // submissionElement elements
+        Document doc = docBuilder.newDocument();
+        Element submissionElement = doc.createElement("dblpsubmission");
+        doc.appendChild(submissionElement);
+
+        // proceedings element
+
+        Element proceedingsElement = doc.createElement("proceedings");
+        submissionElement.appendChild(proceedingsElement);
+
+        // key
+        Element keyElement = doc.createElement("key");
+        keyElement.setTextContent("Computer Science");
+        proceedingsElement.appendChild(keyElement);
+
+        for( String editor : publish.getEditors()) {
+            Element editorElement = doc.createElement("editor");
+            editorElement.setTextContent(editor);
+            proceedingsElement.appendChild(editorElement);
+        }
+
+        //title
+        Element titleElement = doc.createElement("title");
+        titleElement.setTextContent(publish.getConferenceTitle());
+        proceedingsElement.appendChild(titleElement);
+
+        //ISSN
+        if( publish.getISSN() != null ) {
+            Element issnElement = doc.createElement("issn");
+            issnElement.setTextContent(publish.getISSN());
+            issnElement.setAttribute("type", "electronic");
+            proceedingsElement.appendChild(issnElement);
+        }
+
+
+        //ISBN
+        if( publish.getISBN() != null ) {
+            Element isbnElement = doc.createElement("isbn");
+            isbnElement.setTextContent(publish.getISBN());
+            isbnElement.setAttribute("type", "electronic");
+            proceedingsElement.appendChild(isbnElement);
+        }
+
+        //conf Element
+        Element confElement = doc.createElement("conf");
+        proceedingsElement.appendChild(confElement);
+
+        //location Element
+        Element locationElement = doc.createElement("location");
+        locationElement.setTextContent(publish.getLocation());
+        confElement.appendChild(locationElement);
+
+        // date Element
+        Element dateElement = doc.createElement("date");
+        dateElement.setTextContent(publish.getDate());
+        confElement.appendChild(dateElement);
+
+        // toc Element
+        Element tocElement = doc.createElement("toc");
+        proceedingsElement.appendChild(tocElement);
+
+        String currentSection = "";
+        Element currentSectionElement, publElement, publAuthorElement, publTitleElement, publPagesElement;
+        for( Publication publ : publish.getPublications()) {
+            if( !currentSection.equals(publ.getSection()) ) {
+                currentSection = publ.getSection();
+                // section Element
+                currentSectionElement = doc.createElement("section");
+                currentSectionElement.setTextContent(currentSection);
+                tocElement.appendChild(currentSectionElement);
+            }
+            else {
+
+                // publ element
+                publElement = doc.createElement("publ");
+                tocElement.appendChild(publElement);
+
+                // publ_author element
+                for( String author : publ.getAuthors() ) {
+                    publAuthorElement = doc.createElement("author");
+                    publAuthorElement.setTextContent(author);
+                    publElement.appendChild(publAuthorElement);
+                }
+
+                // publ_title element
+                publTitleElement = doc.createElement("title");
+                publTitleElement.setTextContent(publ.getName());
+                publElement.appendChild(publTitleElement);
+
+
+                // publ_pages element
+                publPagesElement = doc.createElement("pages");
+                publPagesElement.setTextContent(publ.getStartPage() + "-" + publ.getFinishPage());
+                publElement.appendChild(publPagesElement);
+
+            }
+        }
+
+        // write the content into xml file
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(new File("dblpFile.xml"));
+
+        // Output to console for testing
+        // StreamResult result = new StreamResult(System.out);
+
+        transformer.transform(source, result);
+
+        System.out.println("File saved!");
+
     }
 
     public static void main(String[] args ) throws IOException {
 
-        PDFTextStripper pdfStripper = null;
-        PDDocument pdfDocument = null;
-        COSDocument cosDocument = null;
-        File inputFile = null;
-        PDFParser parser = null;
-
-        ArrayList<Publication> publications = new ArrayList<Publication>();
-
-        int jumpIndex = 0;
-        int paperContor = 0;
-
-        String title;
-        String authors;
-
+        Publish publish = new Publish("RoCHI-2015-proceedings-vfinal.pdf");
 
         try {
-
-        /* Presupun ca mai toate pdf-uri de conferinte o sa aiba pe
-        *  pe prima pagina titlu, iar pe a doua detalii despre organizatori
-        *  sau alte lucruri. Asa ca o sa sar la pagina 3 direct, unde este cuprisnul
-        * */
-
-            inputFile = new File("RoCHI-2015-proceedings-vfinal.pdf");
-            parser = new PDFParser(new RandomAccessBufferedFileInputStream(inputFile));
-            parser.parse();
-            cosDocument = parser.getDocument();
-            pdfStripper = new PDFTextStripper();
-            pdfDocument = new PDDocument(cosDocument);
-            // aici incepe cuprinsul
-            // daca nu ii dau setEndPage atunci o sa citeasca by default tot pdf-ul
-            pdfStripper.setStartPage(3);
-            pdfStripper.setEndPage(4);
-            String parsedText = pdfStripper.getText(pdfDocument);
-            if( parsedText.contains("TABLE OF CONTENTS") ) {
-                jumpIndex = parsedText.indexOf("TABLE OF CONTENTS");
-                jumpIndex += 18; // 17 lungimea + \n
-                parsedText = parsedText.substring(jumpIndex);
-
-                //start parsing
-                for( String chunk : parsedText.split("\\n\\s+\\n") ) {
-                    /* sunt cazuri in care am mai multe ' ' si cazuri
-                    cand am unul singur, asa ca am decis sa las doar
-                    un singur spatiu. */
-                    chunk = chunk.replaceAll("\\s+", " ");
-                    System.out.println("!" + chunk + "!");
-
-                    if( ( chunk.contains("..") || chunk.contains("…") ) && chunk.contains("\uF0B7 ") ) {
-
-                        if( isLetterOrNumber(chunk.charAt(0)) ) {
-                            //it's catergory - voi sari pana la acel caracter. Trebuie sa vedem daca putem pastra acest
-                            // caracter ca punct de reper.
-                            chunk = chunk.substring(
-                                    chunk.indexOf("\uF0B7 "), // aici trebuie sa pun un regex. Inca ma gandesc cum sa fac
-                                    chunk.length()
-                            );
-                        }
-
-                        int startIndex = min( chunk.indexOf('…'), chunk.indexOf("..") ) ;
-                        int finishIndex = max( chunk.lastIndexOf("…… "), chunk.lastIndexOf(".. ") );
-                        finishIndex = max( finishIndex, chunk.lastIndexOf("…. "));
-
-                        if ( startIndex != -1 && finishIndex != -1 ) {
-                            title = chunk.substring(1, startIndex).trim();
-                            authors = chunk.substring( finishIndex + 3, chunk.length() );
-                            Vector<String> authorZ = new Vector<String>(Arrays.asList(authors.split(" ,")));
-                            publications.add( new Publication(title, authorZ) );
-
-                        }
-                    }
-                    else
-                        if( isNumber(chunk.trim().charAt(0)) && chunk.length() < 6 ) {
-                            // voi presupune ca nu o sa existe pagini mai mari ca 999999
-                            int pageNumber = Integer.parseInt(chunk.trim());
-                            if( paperContor > 0 && paperContor < publications.size() + 1) {
-                                publications.get(paperContor - 1).setFinishPage(pageNumber - 1);
-                            }
-                            if( paperContor < publications.size() ) {
-                                publications.get(paperContor).setStartPage(pageNumber);
-                                paperContor++;
-                            }
-                        }
-                }
-                for( int i = 0; i < publications.size(); i ++ ) {
-                    System.out.println("\n" + publications.get(i) + "\n");
-                }
-            }
-
+            publish.extractInformationFromPDF();
         } catch (IOException e) {
             System.out.println("Eroare deschidere fisier");
+            System.exit(1);
+        }
+        try {
+            dbplXMLCreate(publish);
+        } catch (ParserConfigurationException e) {
+            System.out.println("Eroare creare xml");
+            System.exit(1);
+        } catch (TransformerException e) {
+            System.out.println("Eroare salvare xml");
             System.exit(1);
         }
 
