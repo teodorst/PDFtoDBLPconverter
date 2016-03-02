@@ -27,7 +27,6 @@ public class Main {
 
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
         // submissionElement elements
         Document doc = docBuilder.newDocument();
         Element submissionElement = doc.createElement("dblpsubmission");
@@ -54,13 +53,24 @@ public class Main {
         titleElement.setTextContent(publish.getConferenceTitle());
         proceedingsElement.appendChild(titleElement);
 
-        //ISSN
-        if( publish.getISSN() != null ) {
-            Element issnElement = doc.createElement("issn");
-            issnElement.setTextContent(publish.getISSN());
-            issnElement.setAttribute("type", "electronic");
-            proceedingsElement.appendChild(issnElement);
-        }
+        Element publisherElement = doc.createElement("publisher");
+        publisherElement.setTextContent(publish.getPublishBy());
+        proceedingsElement.appendChild(publisherElement);
+
+
+        //year
+        Element yearElement = doc.createElement("year");
+        yearElement.setTextContent("" + publish.getYear());
+        proceedingsElement.appendChild(yearElement);
+
+
+//        //ISSN
+//        if( publish.getISSN() != null ) {
+//            Element issnElement = doc.createElement("issn");
+//            issnElement.setTextContent(publish.getISSN());
+//            issnElement.setAttribute("type", "electronic");
+//            proceedingsElement.appendChild(issnElement);
+//        }
 
 
         //ISBN
@@ -107,6 +117,7 @@ public class Main {
 
                 // publ_author element
                 for( String author : publ.getAuthors() ) {
+                    System.out.println(author);
                     publAuthorElement = doc.createElement("author");
                     publAuthorElement.setTextContent(author);
                     publElement.appendChild(publAuthorElement);
@@ -129,6 +140,7 @@ public class Main {
         // write the content into xml file
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "dblpsubmission.dtd");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
         DOMSource source = new DOMSource(doc);

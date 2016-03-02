@@ -18,6 +18,8 @@ import java.util.Vector;
 public class Publish {
     private ArrayList<Publication> publications;
     private String ISBN, ISSN, conferenceTitle, filePath, date, location, url;
+    private String publishBy;
+    private int year;
     private Vector<String> editors;
     public static String[] months = {
             "January", "February", "March",
@@ -70,6 +72,22 @@ public class Publish {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getPublishBy() {
+        return publishBy;
+    }
+
+    public void setPublishBy(String publishBy) {
+        this.publishBy = publishBy;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 
     public boolean containsMonth(String text) {
@@ -127,55 +145,65 @@ public class Publish {
         System.out.println(conferenceTitle);
 
 
-        //extrag editorii
+        //extrag detaliile conferintei
         boolean editorsState = false;
         boolean descriptionState = false;
         boolean locationState = false;
+        boolean publishByState = false;
+        boolean yearState = false;
         for(String linie : parsedText.split("\n")) {
-            if( containsMonth(linie) ) { // get date
+            if(editorsState && (linie.trim().equals(" ") || linie.trim().isEmpty())) {
+                // exit editors state
+                editorsState = false;
+                publishByState = true;
+            }
+            else if(linie.trim().equals(" ") || linie.trim().isEmpty()) {
+                continue;
+            }
+            else if( publishByState ) {
+                System.out.println(linie);
+                publishBy = linie.trim();
+                publishByState = false;
+                yearState = true;
+            }
+            else if( yearState ) {
+                System.out.println(linie);
+                year = Integer.parseInt(linie.split(", ")[1].trim());
+                yearState = false;
+            }
+            else if( containsMonth(linie) ) { // get date
                 jumpIndex = linie.indexOf(", ");
                 date = linie.substring(jumpIndex + 2).trim();
                 locationState = true;
             }
-            else
-                if( locationState ) { // get location
-                    location = linie.trim();
-                    locationState = false;
-                }
-            else
-                if( linie.contains("Edited")) {
-                    editorsState = true;
-                }
-            else
-                if( editorsState && linie.contains("and") ) {
-                    continue;
-                }
-            else
-                if(editorsState && (linie.trim().equals(" ") || linie.trim().isEmpty())) {
-                    editorsState = false;
-                }
-            else
-                if( editorsState && descriptionState) {
-                    descriptionState = false;
-                    continue;
-                }
-            else
-                if( editorsState ) {
-                    editors.add(linie.trim());
-                    descriptionState = true;
-                }
-            else
-                if( !editorsState && !descriptionState && linie.trim().contains("ISSN") ) {
-                    jumpIndex = linie.indexOf("ISSN");
-                    jumpIndex += 4;
-                    ISSN = linie.substring(jumpIndex).trim();
-                }
-            else
-                if( !editorsState && !descriptionState && linie.trim().contains("ISBN") ) {
-                    jumpIndex = linie.indexOf("ISBN");
-                    jumpIndex += 4;
-                    ISBN = linie.substring(jumpIndex).trim();
-                }
+            else if( locationState ) { // get location
+                location = linie.trim();
+                locationState = false;
+            }
+            else if( linie.contains("Edited")) {
+                editorsState = true;
+            }
+            else if( editorsState && linie.contains("and") ) {
+                continue;
+            }
+            else if( editorsState && descriptionState) {
+                descriptionState = false;
+                continue;
+            }
+            else if( editorsState ) {
+                editors.add(linie.trim());
+                descriptionState = true;
+            }
+            else if( !editorsState && !descriptionState && linie.trim().contains("ISSN") ) {
+                jumpIndex = linie.indexOf("ISSN");
+                jumpIndex += 4;
+                ISSN = linie.substring(jumpIndex).trim();
+            }
+            else if( !editorsState && !descriptionState && linie.trim().contains("ISBN") ) {
+                jumpIndex = linie.indexOf("ISBN");
+                jumpIndex += 4;
+                ISBN = linie.substring(jumpIndex).trim();
+            }
         }
 
         System.out.println(editors);
@@ -223,7 +251,7 @@ public class Publish {
                     if ( startIndex != -1 && finishIndex != -1 ) {
                         title = chunk.substring(1, startIndex).trim();
                         authors = chunk.substring( finishIndex + 3, chunk.length() );
-                        Vector<String> authorZ = new Vector<String>(Arrays.asList(authors.split(" ,")));
+                        Vector<String> authorZ = new Vector<String>(Arrays.asList(authors.split(", ")));
                         publications.add( new Publication(title, section, authorZ) );
                     }
                 }
