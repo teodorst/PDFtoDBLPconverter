@@ -117,7 +117,6 @@ public class Main {
 
                 // publ_author element
                 for( String author : publ.getAuthors() ) {
-                    System.out.println(author);
                     publAuthorElement = doc.createElement("author");
                     publAuthorElement.setTextContent(author);
                     publElement.appendChild(publAuthorElement);

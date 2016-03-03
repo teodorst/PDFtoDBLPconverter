@@ -250,9 +250,48 @@ public class Publish {
 
                     if ( startIndex != -1 && finishIndex != -1 ) {
                         title = chunk.substring(1, startIndex).trim();
+                        int titleSeparationIndex = 0;
+                        titleSeparationIndex = title.indexOf("- ");
+                        while ( titleSeparationIndex >= 0 ) {
+                            //verific daca titlul este despartit pe doua randuri
+                            // presupun ca nu foloseste '- ' pentru a exprima ceva in titlu.
+                            title = title.substring(0, titleSeparationIndex)
+                                    + title.substring(titleSeparationIndex + 2);
+                            titleSeparationIndex = title.indexOf("- ");
+                        }
                         authors = chunk.substring( finishIndex + 3, chunk.length() );
-                        Vector<String> authorZ = new Vector<String>(Arrays.asList(authors.split(", ")));
-                        publications.add( new Publication(title, section, authorZ) );
+                        // verific daca numele sunt ok, sa nu se strecoare un text din alta parte
+                        // altfel as fi facut ca in codul comentat
+                        /*
+                        Vector<String> authorsVector = new Vector<String>(Arrays.asList(authors.split(", ")));
+                         */
+                        // acest lucru il fac pentru ca la ultimul autor din pagina 1 de curpins mi se adauga si x vi
+                        // care sunt tot in aceeasi pagina doar ca in coltul din dreapta sus.
+                        Vector<String> authorsVector = new Vector<String>();
+                        int contor = 0;
+                        for( String author : authors.split(", ")) {
+                            // verific daca primele nume sunt mai mici ca urmatoarele
+                            contor = 0;
+                            String[] authorNames = author.split(" ");
+                            for( int i = 0; i < authorNames.length; i ++ ) {
+                                if( authorNames[i].length() <= 2 ) {
+                                    contor ++;
+                                }
+                                else {
+                                    contor = 0;
+                                }
+                            }
+                            if( contor == 0 ) {
+                                authorsVector.add(author);
+                            }
+                            else {
+                                String authorName = "";
+                                for(int i = 0 ; i < authorNames.length - contor; i ++ )
+                                    authorName +=  " " + authorNames[i];
+                                authorsVector.add(authorName.trim());
+                            }
+                        }
+                        publications.add( new Publication(title, section, authorsVector) );
                     }
                 }
                 else

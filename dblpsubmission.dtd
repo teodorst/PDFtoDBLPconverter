@@ -1,6 +1,5 @@
 <!ELEMENT dblpsubmission (proceedings|journal)*>
 
-
 <!ELEMENT proceedings (key?,editor*,title,publisher?,year,isbn*,doi?,conf,series?,toc)>
 <!ELEMENT conf (acronym?,number?,location,date,url?,partof?)>
 <!ELEMENT series (key?,title,number?)>
